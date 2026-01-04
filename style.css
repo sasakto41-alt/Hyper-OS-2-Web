@@ -1,0 +1,574 @@
+:root {
+  -webkit-tap-highlight-color: transparent;
+  --bg--text_lock_screen: "";
+  --bg--color_text_lock_screen: #ffffff;
+  --bg--ratio_phone: 330 / 700;
+  --bg--size_width_phone: 330px;
+  --bg--size_height_phone: 700px;
+  --bg--border_radius_phone: 50px;
+  --bg--scale_phone: 0.8;
+  --bg--border_radius_system: 15px; /* 20-35px */
+  --bg--background: #eaeaea;
+  --bg--background2: #ffffff;
+  --bg--color: #101010;
+  --bg--wallpaper: #34495e; /* Generic solid color or simple gradient */
+
+  --bg--timeHidingIcon: 0.21s;
+  --bg--delayHidingIcon: 0s;
+  --bg--timeShowingIcon: 0.21s;
+  --bg--delayShowingIcon: 0.035s;
+
+  /* Custom variables for demo */
+  --phone-padding-bottom: 80px;
+  --icon-base-top: calc(var(--bg--size_height_phone) - 95px - var(--phone-padding-bottom));
+  --bg-size_img: 100%; /* Default for now */
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #272727; /* Darker background for the page */
+  user-select: none;
+  touch-action: none;
+}
+
+/* Loading screen (simplified) */
+#loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #272727;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+  color: white;
+  transition: opacity 0.3s ease;
+}
+#loading-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ccc;
+  border-top-color: #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 12px;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+#loading-screen p {
+    margin: 5px 0;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 14px;
+}
+
+/* Lock Screen Styles */
+#lock-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0.1)), var(--bg--wallpaper); /* Dark overlay + wallpaper */
+    background-size: cover;
+    background-position: center;
+    z-index: 10221; /* Above phone, below loading screen */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes content to top/bottom */
+    align-items: center;
+    color: white;
+    font-family: 'Noto Sans', sans-serif;
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+}
+
+#lock-screen.hidden {
+    transform: translateY(-100%); /* Slide up to hide */
+    opacity: 0;
+    pointer-events: none;
+}
+
+.lock-screen-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px; /* Adjust as needed */
+}
+
+.lock-screen-content .time {
+    font-size: 4rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.lock-screen-content .date {
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+.unlock-instruction {
+    position: absolute;
+    bottom: 50px; /* Position at the bottom */
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    animation: pulse 1.5s infinite; /* Simple pulse animation */
+}
+
+@keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
+
+/* PHONE MOCKUP */
+.phone {
+  width: var(--bg--size_width_phone);
+  height: var(--bg--size_height_phone);
+  border-radius: calc(var(--bg--border_radius_phone) + 1px); /* Match OriginOS outer radius */
+  border: 3px solid rgb(0, 0, 0);
+  outline: 1px solid gray;
+  outline-offset: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgba(47, 11, 34, 255),
+    rgba(147, 111, 134, 255)
+  ); /* Example gradient, usually wallpaper shows through */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%; /* Center on screen */
+  transform: scale(var(--bg--scale_phone));
+  transition: all 0.6s cubic-bezier(0.23, 0.55, 0.54, 0.97), filter 0s;
+  z-index: 10220;
+  overflow: hidden;
+  aspect-ratio: var(--bg--ratio_phone);
+}
+
+/* WALLPAPER */
+.wallpaper {
+  width: 100%;
+  height: 100%;
+  background: var(--bg--wallpaper); /* Uses generic wallpaper variable */
+  background-size: cover;
+  background-position: center;
+  scale: 100%;
+  transition: all 0.6s cubic-bezier(0.23, 0.55, 0.54, 0.97);
+  border-radius: var(--bg--border_radius_phone);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.wallpaper.open {
+  scale: 110%; /* Zoom effect on open */
+}
+
+/* APP ICONS */
+.box {
+  position: absolute;
+  overflow: hidden;
+  border-radius: var(--bg--border_radius_system); /* Use system border radius */
+  width: 60px;
+  aspect-ratio: 1 / 1;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transform: translate(0, 0) scale(1);
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 1;
+  scale: 100%;
+  display: flex; /* To center SVG */
+  align-items: center; /* To center SVG */
+  justify-content: center; /* To center SVG */
+  background-color: var(--bg--background2); /* Default icon background color */
+}
+
+.box .icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* App icon SVG styling */
+.box svg {
+    width: 32px;
+    height: 32px;
+    color: #3498db; /* Default icon color */
+    transition: opacity var(--bg--timeShowingIcon) ease var(--bg--delayShowingIcon);
+}
+
+/* Hides the SVG icon when app opens */
+.box.open svg {
+  opacity: 0; 
+}
+
+
+/* Positioning for the icons (from OriginOS, adapted) */
+/* These will use generic background colors as originos_data is removed */
+#box1 { left: 10%; top: calc(var(--bg--size_height_phone) - 95px); }
+#box2 { left: 30.5%; top: calc(var(--bg--size_height_phone) - 95px); }
+#box3 { right: 30.5%; top: calc(var(--bg--size_height_phone) - 95px); }
+#box4 { right: 10%; top: calc(var(--bg--size_height_phone) - 95px); }
+#box5 { right: 10%; top: calc(var(--bg--size_height_phone) - 210px); }
+#box6 { right: 30.5%; top: calc(var(--bg--size_height_phone) - 210px); }
+#box7 { left: 30.5%; top: calc(var(--bg--size_height_phone) - 210px); }
+#box8 { left: 10%; top: calc(var(--bg--size_height_phone) - 210px); }
+/* Example of custom size icon, will need to be re-evaluated for generic SVGs */
+#box9 { left: 10%; top: calc(var(--bg--size_height_phone) - 280px); width: calc(60px + 20.5%); aspect-ratio: 260 / 123; }
+#box10 { left: 10%; top: calc(var(--bg--size_height_phone) - 350px); width: calc(60px + 20.5%); aspect-ratio: 260 / 123; }
+#box11 { top: 70px; left: 10%; width: 260px; aspect-ratio: 260 / 135; }
+#box12 { right: 10%; top: calc(var(--bg--size_height_phone) - 350px); width: calc(60px + 20.5%); aspect-ratio: 260 / 123; }
+#box13 { left: 10%; top: calc(var(--bg--size_height_phone) - 425px); } /* Power Button */
+
+
+/* Open state (full screen) */
+#box11.open {
+  width: 100%;
+  aspect-ratio: var(--bg--ratio_phone);
+  border-radius: calc(var(--bg--border_radius_phone) - 1px);
+  transform: scale(1.1628);
+  left: 0;
+  top: 0%;
+  z-index: 200;
+}
+
+#box12.open,
+#box5.open,
+#box6.open,
+#box3.open,
+#box4.open {
+  width: 100%;
+  aspect-ratio: var(--bg--ratio_phone);
+  border-radius: calc(var(--bg--border_radius_phone) - 1px);
+  transform: scale(1.1628);
+  right: 0;
+  top: 0%;
+  z-index: 200;
+}
+#box10.open,
+#box9.open,
+#box8.open,
+#box7.open,
+#box1.open,
+#box2.open {
+  width: 100%;
+  aspect-ratio: var(--bg--ratio_phone);
+  border-radius: calc(var(--bg--border_radius_phone) - 1px);
+  transform: scale(1.1628);
+  left: 0;
+  top: 0%;
+  z-index: 200;
+}
+
+/* APP SCREENS */
+.app {
+  position: absolute;
+  display: none; /* Hidden by default */
+  background: var(--bg--background);
+  color: var(--bg--color);
+  width: var(--bg--size_width_phone);
+  height: var(--bg--size_height_phone);
+  font-size: 24px;
+  font-weight: bold;
+  cursor: default;
+  left: 50%;
+  transform: translateX(-50%) scale(0.1); /* Start small */
+  transform-origin: center;
+  top: 0px;
+  z-index: 2000; /* LOWERED Z-INDEX to be below home bar */
+  transition: all var(--bg--timeShowingIcon) ease var(--bg--delayShowingIcon);
+  opacity: 0;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: 'Noto Sans', sans-serif;
+  pointer-events: none;
+  border-radius: var(--bg--border_radius_system);
+}
+
+.app.open {
+  opacity: 1;
+  transform: translateX(-50%) scale(1.0);
+  pointer-events: all;
+  transition: all var(--bg--timeShowingIcon) ease var(--bg--delayShowingIcon);
+  border-radius: calc(var(--bg--border_radius_phone) - 1px);
+}
+
+/* Phone Camera Dot (simplified) */
+.camera {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px; /* Smaller dot */
+  height: 12px;
+  background: #111;
+  border-radius: 50%;
+  z-index: 123167233;
+}
+
+
+/* Home Bar (from OriginOS, now functional) */
+#home-bar {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 130px;
+  height: 3px;
+  background: gray;
+  border-radius: 20px;
+  z-index: 9999;
+  cursor: grab; /* Indicating draggable */
+  user-select: none;
+  touch-action: none; /* Prevent browser touch actions */
+  transition: all 0.2s ease;
+  pointer-events: auto;
+}
+
+#home-bar::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: -60px;
+  right: -60px;
+  bottom: -40px;
+  background: transparent;
+  pointer-events: auto;
+}
+#home-bar:hover {
+    background: rgba(128,128,128,0.7);
+    transform: translateX(-50%) translateY(-3px);
+}
+#home-bar:active { /* Visual cue for pulling up */
+    transform: translateX(-50%) translateY(-7px);
+}
+
+
+/* App Header and Content (retained generic structure) */
+.app-header {
+    width: 100%;
+    padding: 12px 16px;
+    padding-top: 45px; /* Consistent top padding */
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    background: var(--bg--background2); /* Match theme */
+    color: var(--bg--color); /* Match theme */
+    border-radius: var(--bg--border_radius_system) var(--bg--border_radius_system) 0 0; /* Rounded top corners */
+}
+
+.app-content {
+    padding: 16px;
+    flex-grow: 1;
+    opacity: 1;
+    transform: translateY(0);
+    color: var(--bg--color); /* Match theme */
+    font-size: 16px;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.app-content--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: rgba(16, 16, 16, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+
+.calculator-app {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    justify-content: center;
+}
+
+.calculator-display {
+    background: rgba(0, 0, 0, 0.85);
+    color: #ffffff;
+    border-radius: 18px;
+    padding: 20px;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.35);
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.calculator-expression {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.6);
+    min-height: 1.2em;
+    word-break: break-word;
+    width: 100%;
+    text-align: right;
+}
+
+.calculator-result {
+    font-size: 2.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    word-break: break-word;
+    width: 100%;
+    text-align: right;
+}
+
+.calculator-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.calculator-key {
+    background: rgba(255, 255, 255, 0.85);
+    border: none;
+    border-radius: 18px;
+    padding: 16px 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1d1d1f;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.2s ease, background 0.2s ease;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.calculator-key:active {
+    transform: translateY(2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+.calculator-key--operator {
+    background: linear-gradient(135deg, #f77062, #fe5196);
+    color: #ffffff;
+}
+
+.calculator-key--control {
+    background: rgba(255, 255, 255, 0.35);
+    color: #ffffff;
+    backdrop-filter: blur(10px);
+}
+
+.calculator-key--equals {
+    background: linear-gradient(135deg, #36d1dc, #5b86e5);
+    color: #ffffff;
+}
+
+.calculator-key--zero {
+    grid-column: span 2;
+}
+
+.calculator-key[aria-hidden="true"] {
+    visibility: hidden;
+}
+
+.calculator-key:focus-visible {
+    outline: 3px solid rgba(91, 134, 229, 0.5);
+    outline-offset: 2px;
+}
+
+/* Settings App Specific Styles */
+#app4.app { /* Target the settings app specifically */
+    display: flex; /* Make sure it's flex by default */
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 20px; /* Give some space */
+}
+
+.settings-group {
+    background: var(--bg--background2);
+    border-radius: var(--bg--border_radius_system);
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    width: calc(100% - 40px); /* Adjust width */
+    max-width: 300px; /* Limit width */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+    color: var(--bg--color);
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.settings-group label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.settings-group input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    height: 8px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity .2s;
+    border-radius: 5px;
+}
+
+.settings-group input[type="range"]:hover {
+    opacity: 1;
+}
+
+.settings-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #3498db;
+    cursor: pointer;
+}
+
+.settings-group input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #3498db;
+    cursor: pointer;
+}
+
+.slider-value {
+    font-size: 12px;
+    color: gray;
+}

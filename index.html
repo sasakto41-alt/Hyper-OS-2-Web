@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="light" />
+    <title>Custom OriginOS-style Animation</title>
+    <!-- Keep basic Noto Sans for text from OriginOS, remove many others -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Simplified loading screen -->
+    <div id="loading-screen">
+      <div class="spinner"></div>
+      <p>Developers balkov and ktm</p>
+    </div>
+
+    <!-- Lock Screen -->
+    <div id="lock-screen">
+        <div class="lock-screen-content">
+            <div class="time" id="lock-screen-time"></div>
+            <div class="date" id="lock-screen-date"></div>
+            <div class="unlock-instruction">Swipe to unlock</div>
+        </div>
+    </div>
+    
+    <!-- Phone container and mockup -->
+    <div class="phone-container">
+        <div id="phone" class="phone">
+            <!-- Wallpaper -->
+            <div id="wallpaper" class="wallpaper"></div>
+            
+            <!-- Camera Dot (simplified from previous phone-camera-dot) -->
+            <div class="camera"></div>
+            
+            <!-- App Icons (используются PNG из папки icons) -->
+            <div id="box1" class="box" data-app-id="app1">
+                <img src="icons/App 1.png" alt="App 1" class="icon-img" />
+            </div>
+            <div id="box2" class="box" data-app-id="app2">
+                <img src="icons/App 2.png" alt="App 2" class="icon-img" />
+            </div>
+            <div id="box3" class="box" data-app-id="app3">
+                <img src="icons/App 3.png" alt="App 3" class="icon-img" />
+            </div>
+            <div id="box4" class="box" data-app-id="app4">
+                <img src="icons/system_settings.png" alt="Settings" class="icon-img" />
+            </div>
+            <div id="box5" class="box" data-app-id="app5">
+                <img src="icons/App 5.png" alt="App 5" class="icon-img" />
+            </div>
+            <div id="box6" class="box" data-app-id="app6">
+                <img src="icons/App 6.png" alt="App 6" class="icon-img" />
+            </div>
+            <div id="box7" class="box" data-app-id="app7">
+                <img src="icons/App 7.png" alt="App 7" class="icon-img" />
+            </div>
+            <div id="box8" class="box" data-app-id="app8">
+                <img src="icons/App 8.png" alt="App 8" class="icon-img" />
+            </div>
+             <div id="box9" class="box" data-app-id="app9">
+                <svg viewBox="0 0 260 123" class="icon icon-widget-music" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="grad-app9" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#161a6d" />
+                            <stop offset="100%" stop-color="#7f53ac" />
+                        </linearGradient>
+                        <linearGradient id="grad-app9-accent" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#ffb199" />
+                            <stop offset="100%" stop-color="#ff0844" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="6" y="6" width="248" height="111" rx="28" fill="url(#grad-app9)" />
+                    <circle cx="86" cy="61.5" r="26" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.3)" stroke-width="4" />
+                    <circle cx="86" cy="61.5" r="12" fill="url(#grad-app9-accent)" />
+                    <rect x="130" y="38" width="14" height="50" rx="6" fill="rgba(255,255,255,0.6)" />
+                    <rect x="152" y="48" width="14" height="40" rx="6" fill="rgba(255,255,255,0.4)" />
+                    <rect x="174" y="32" width="14" height="56" rx="6" fill="rgba(255,255,255,0.75)" />
+                    <rect x="196" y="44" width="14" height="44" rx="6" fill="rgba(255,255,255,0.5)" />
+                    <path d="M120 28h108" stroke="rgba(255,255,255,0.25)" stroke-width="4" stroke-linecap="round" />
+                    <circle cx="210" cy="28" r="6" fill="#ff0844" />
+                    <circle cx="226" cy="28" r="6" fill="#ffb199" />
+                </svg>
+            </div>
+            <div id="box10" class="box" data-app-id="app10">
+                <svg viewBox="0 0 260 123" class="icon icon-widget-weather" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="grad-app10" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#0f2027" />
+                            <stop offset="50%" stop-color="#203a43" />
+                            <stop offset="100%" stop-color="#2c5364" />
+                        </linearGradient>
+                        <radialGradient id="grad-app10-sun" cx="0.8" cy="0.2" r="0.5">
+                            <stop offset="0%" stop-color="#ffd200" />
+                            <stop offset="100%" stop-color="rgba(255,210,0,0)" />
+                        </radialGradient>
+                    </defs>
+                    <rect x="6" y="6" width="248" height="111" rx="28" fill="url(#grad-app10)" />
+                    <circle cx="200" cy="38" r="24" fill="url(#grad-app10-sun)" />
+                    <path d="M92 78h102" stroke="rgba(255,255,255,0.2)" stroke-width="4" stroke-linecap="round" />
+                    <path d="M58 82c-12 0-22-7.5-22-18.5S46 45 58 45c6.2 0 11.8 2.6 15.3 6.8A22 22 0 0 1 112 50c11.6 0 21 8.6 22.4 19.6 9.7-1.4 19.6 5.1 21.9 15.2C162 92 150 101 136 97H79c-9.8 0-19-6.5-21-15z" fill="#ffffff" opacity="0.82" />
+                    <line x1="86" y1="96" x2="96" y2="112" stroke="#4aa3ff" stroke-width="4" stroke-linecap="round" />
+                    <line x1="108" y1="100" x2="118" y2="116" stroke="#4aa3ff" stroke-width="4" stroke-linecap="round" />
+                    <line x1="130" y1="96" x2="140" y2="112" stroke="#4aa3ff" stroke-width="4" stroke-linecap="round" />
+                </svg>
+            </div>
+            <div id="box11" class="box" data-app-id="app11">
+                <img src="icons/system_photos.png" alt="Photos" class="icon-img" />
+            </div>
+            <div id="box12" class="box" data-app-id="app12">
+                <svg viewBox="0 0 260 123" class="icon icon-widget-notes" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="grad-app12" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#1a2980" />
+                            <stop offset="100%" stop-color="#26d0ce" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="6" y="6" width="248" height="111" rx="28" fill="url(#grad-app12)" />
+                    <rect x="24" y="24" width="212" height="68" rx="22" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="3" />
+                    <g transform="translate(38 44)">
+                        <circle cx="0" cy="0" r="10" fill="rgba(38,208,206,0.85)" />
+                        <path d="M-4 0l4 4 8-8" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                    </g>
+                    <rect x="70" y="34" width="140" height="12" rx="6" fill="#ffffff" opacity="0.75" />
+                    <rect x="70" y="54" width="120" height="12" rx="6" fill="#ffffff" opacity="0.45" />
+                    <g transform="translate(38 82)">
+                        <circle cx="0" cy="0" r="10" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="3" />
+                    </g>
+                    <rect x="70" y="74" width="112" height="12" rx="6" fill="#ffffff" opacity="0.35" />
+                </svg>
+            </div>
+            <div id="box13" class="box" data-app-id="power-button">
+                <svg viewBox="0 0 64 64" class="icon icon-power" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="grad-app13" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#f83600" />
+                            <stop offset="100%" stop-color="#f9d423" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="6" y="6" width="52" height="52" rx="18" fill="url(#grad-app13)" />
+                    <path d="M32 20v16" stroke="#ffffff" stroke-width="5" stroke-linecap="round" />
+                    <path d="M20 26a16 16 0 1 0 24 0" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" />
+                    <circle cx="32" cy="46" r="4" fill="rgba(255,255,255,0.6)" />
+                </svg>
+            </div>
+
+            <!-- App Screens (simplified content) -->
+            <div id="app1" class="app">
+                <div class="app-header">
+                    <span class="app-title"></span>
+                </div>
+                <div class="app-content calculator-app" id="calculator-app">
+                    <div class="calculator-display">
+                        <div class="calculator-expression" data-display="expression">&nbsp;</div>
+                        <div class="calculator-result" data-display="result">0</div>
+                    </div>
+                    <div class="calculator-buttons">
+                        <button type="button" class="calculator-key calculator-key--control" data-action="clear">AC</button>
+                        <button type="button" class="calculator-key calculator-key--control" data-action="delete">DEL</button>
+                        <button type="button" class="calculator-key calculator-key--operator" data-operator="÷">÷</button>
+                        <button type="button" class="calculator-key calculator-key--operator" data-operator="×">×</button>
+
+                        <button type="button" class="calculator-key" data-digit="7">7</button>
+                        <button type="button" class="calculator-key" data-digit="8">8</button>
+                        <button type="button" class="calculator-key" data-digit="9">9</button>
+                        <button type="button" class="calculator-key calculator-key--operator" data-operator="-">-</button>
+
+                        <button type="button" class="calculator-key" data-digit="4">4</button>
+                        <button type="button" class="calculator-key" data-digit="5">5</button>
+                        <button type="button" class="calculator-key" data-digit="6">6</button>
+                        <button type="button" class="calculator-key calculator-key--operator" data-operator="+">+</button>
+
+                        <button type="button" class="calculator-key" data-digit="1">1</button>
+                        <button type="button" class="calculator-key" data-digit="2">2</button>
+                        <button type="button" class="calculator-key" data-digit="3">3</button>
+                        <button type="button" class="calculator-key calculator-key--equals" data-action="equals">=</button>
+
+                        <button type="button" class="calculator-key calculator-key--zero" data-digit="0">0</button>
+                        <button type="button" class="calculator-key" data-decimal=".">.</button>
+                        <button type="button" class="calculator-key" data-digit="00">00</button>
+                        <button type="button" class="calculator-key calculator-key--equals" data-action="equals" aria-hidden="true" tabindex="-1"></button>
+                    </div>
+                </div>
+            </div>
+            <div id="app2" class="app">
+                <div class="app-header">
+                    <span class="app-title"></span>
+                </div>
+                <div class="app-content app-content--empty"><div class="app-placeholder">None</div></div>
+            </div>
+            <div id="app3" class="app">
+                <div class="app-header">
+                    <span class="app-title"></span>
+                </div>
+                <div class="app-content"><div class="app-placeholder">None</div></div>
+            </div>
+            <div id="app4" class="app">
+                <div class="app-header">
+                    <span class="app-title"></span>
+                </div>
+                <div class="app-content">
+                    <div class="settings-group">
+                        <label for="animationSpeed">Animation Speed: <span id="animationSpeedValue">1.0</span>x</label>
+                        <input type="range" id="animationSpeed" min="0.5" max="2.0" step="0.1" value="1.0">
+                    </div>
+                    <div class="settings-group">
+                        <label for="baseDuration">Base Duration: <span id="baseDurationValue">0.5</span>s</label>
+                        <input type="range" id="baseDuration" min="0.3" max="1.0" step="0.05" value="0.5">
+                    </div>
+                    <!-- Future: Easing presets, etc. -->
+                </div>
+            </div>
+             <div id="app5" class="app">
+                <div class="app-header">
+                    <span class="app-title"></span>
+                </div>
+                <div class="app-content"><div class="app-placeholder">None</div></div>
+            </div>
+            <div id="app6" class="app">
+                <div class="app-header">
+                    <span class="app-title"></span>
+                </div>
+                <div class="app-content"><div class="app-placeholder">None</div></div>
+            </div>
+            <div id="app7" class="app">
+                <div class="app-header">
+                    <span class="app-title"></span>
+                </div>
+                <div class="app-content"><div class="app-placeholder">None</div></div>
+            </div>
+            <div id="app8" class="app">
+                <div class="app-header">
+                    <span class="app-title"></span>
+                </div>
+                <div class="app-content app-content--empty"><div class="app-placeholder">None</div></div>
+            </div>
+            <div id="app9" class="app">
+                <div class="app-header">
+                    <span class="app-title"></span>
+                </div>
+                <div class="app-content"><div class="app-placeholder">None</div></div>
+            </div>
+            <div id="app10" class="app">
+                <div class="app-header">
+                    <span class="app-title"></span>
+                </div>
+                <div class="app-content"><div class="app-placeholder">None</div></div>
+            </div>
+            <div id="app11" class="app">
+                <div class="app-header">
+                    <span class="app-title"></span>
+                </div>
+                <div class="app-content"><div class="app-placeholder">None</div></div>
+            </div>
+            <div id="app12" class="app">
+                <div class="app-header">
+                    <span class="app-title"></span>
+                </div>
+                <div class="app-content"><div class="app-placeholder">None</div></div>
+            </div>
+
+            <!-- Home Bar -->
+            <div id="home-bar" class="nav"></div> 
+            
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
